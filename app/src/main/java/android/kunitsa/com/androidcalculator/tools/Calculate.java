@@ -1,4 +1,4 @@
-package android.kunitsa.com.androidcalculator;
+package android.kunitsa.com.androidcalculator.tools;
 
 import java.math.BigDecimal;
 
@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * Test Calculator
  */
 
-class Calculate {
+public class Calculate {
 
     BigDecimal plus(BigDecimal one, BigDecimal two) {
         return one.add(two);

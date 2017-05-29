@@ -1,20 +1,29 @@
-package android.kunitsa.com.androidcalculator;
+package android.kunitsa.com.androidcalculator.activities;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.kunitsa.com.androidcalculator.R;
+import android.kunitsa.com.androidcalculator.tools.Calculate;
+import android.kunitsa.com.androidcalculator.tools.ExpressionUtils;
+import android.kunitsa.com.androidcalculator.tools.HistoryItem;
+import android.kunitsa.com.androidcalculator.tools.HistoryKeeper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button allClear, equals, divide, multiply, minus, plus, square, percent, exponent, left, right, polska;
     Button one, two, three, four, five, six, seven, eight, nine, zero, point;
-    EditText display, symbolDisplay;
+    EditText display;
+    TextView symbolDisplay;
     String line;
 
     private BigDecimal valueOne, valueTwo;
@@ -51,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void registerSimpleComponents() {
         display = (EditText) findViewById(R.id.editText1);
-        symbolDisplay = (EditText) findViewById(R.id.editText2);
+        symbolDisplay = (TextView) findViewById(R.id.editText2);
+        symbolDisplay.setOnClickListener(this);
         allClear = (Button) findViewById(R.id.btnClear);
         allClear.setOnClickListener(this);
         equals = (Button) findViewById(R.id.btnResult);
@@ -166,21 +176,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 display.append("*");
                 break;
             case R.id.btnSquare:
-                /*if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    display.setText(valueOne.multiply(valueOne).toString());
-                    symbolDisplay.setText("^2");
-                }*/
+
                 break;
             case R.id.btnPercent:
-                /*if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
-                    bPercent = true;
-                    symbolDisplay.setText("%");
-                }*/
+
                 break;
             case R.id.btnExponent:
                 if (TextUtils.isEmpty(display.getText())){
@@ -194,26 +193,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnResult:
                 line = display.getText().toString();
-                ExpressionUtils expUtils = new ExpressionUtils();
-                symbolDisplay.setText(expUtils.sortingStation(line, expUtils.MAIN_MATH_OPERATIONS));
-                symbolDisplay.setText(expUtils.calculateExpression(line).toPlainString());
-                /*if (TextUtils.isEmpty(display.getText())) {
-                    display.setText("");
-                } else {
-                    valueTwo = new BigDecimal(display.getText().toString());
-                }
-                if (bPercent){
-                    BigDecimal test = new BigDecimal(100);
-                    BigDecimal value = new BigDecimal(0);
-                    value = valueOne.divide(test, 3, BigDecimal.ROUND_HALF_UP);
-                    valueTwo = valueTwo.multiply(value);
-                    bPercent=false;
-                }
-                if (bExponent){
-                    display.setText(calc.exponent(valueOne,valueTwo).toString());
-                    bExponent=false;
-                    symbolDisplay.setText("");
-                }*/
+                String result;
+                result = ExpressionUtils.calculateExpression(line).toPlainString();
+                symbolDisplay.setText(result);
+                HistoryKeeper.addItem(new HistoryItem(new Date(), line, result));
+                display.setText("");
+                break;
+            case R.id.editText2:
+                Intent intent = new Intent(this, HistoryActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btnClear:
                 display.setText("");

@@ -1,4 +1,4 @@
-package android.kunitsa.com.androidcalculator;
+package android.kunitsa.com.androidcalculator.tools;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

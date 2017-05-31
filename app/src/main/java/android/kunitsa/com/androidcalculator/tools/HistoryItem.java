@@ -4,17 +4,27 @@ import java.util.Date;
 
 public class HistoryItem {
 
-    private Date date;
+    private long id;
+    private String date;
     private String expression;
     private String result;
 
-    public HistoryItem(Date date, String expression, String result) {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public HistoryItem(int id, String date, String expression, String result) {
+        this.id = id;
         this.date = date;
         this.expression = expression;
         this.result = result;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 

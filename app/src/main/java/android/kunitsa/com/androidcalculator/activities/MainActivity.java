@@ -1,21 +1,21 @@
 package android.kunitsa.com.androidcalculator.activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.kunitsa.com.androidcalculator.DBHelper;
 import android.kunitsa.com.androidcalculator.R;
-import android.kunitsa.com.androidcalculator.tools.Calculate;
 import android.kunitsa.com.androidcalculator.tools.ExpressionUtils;
-import android.kunitsa.com.androidcalculator.tools.HistoryItem;
-import android.kunitsa.com.androidcalculator.tools.HistoryKeeper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -24,18 +24,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button one, two, three, four, five, six, seven, eight, nine, zero, point;
     EditText display;
     TextView symbolDisplay;
-    String line;
 
-    private BigDecimal valueOne, valueTwo;
-    private boolean bPlus, bMinus, bMultiply, bDivide, bPercent, bExponent;
-    Calculate calc = new Calculate();
-
+    SQLiteOpenHelper dbHelper;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_polska);
         registerSimpleComponents();
         registerPolskaComponents();
+        dbHelper = new DBHelper(this);
     }
 
     @Override
@@ -50,12 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             registerSimpleComponents();
             registerEngeneeringComponents();
         }
-    }
-
-    public void polska() {
-        setContentView(R.layout.activity_main_polska);
-        registerSimpleComponents();
-        registerPolskaComponents();
     }
 
     public void registerSimpleComponents() {
@@ -98,11 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         minus.setOnClickListener(this);
     }
 
-    void registerPolskaButton() {
-        polska = (Button) findViewById(R.id.btnPolska);
-        polska.setOnClickListener(this);
-    }
-
     void registerEngeneeringComponents() {
         square = (Button) findViewById(R.id.btnSquare);
         square.setOnClickListener(this);
@@ -121,9 +107,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnPolska:
-                polska();
-                break;
             case R.id.btnLeft:
                 display.append("(");
                 break;
@@ -182,31 +165,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btnExponent:
-                if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bExponent = true;
-                    display.setText("");
-                    symbolDisplay.setText("^");
-                }
+
                 break;
             case R.id.btnResult:
-                line = display.getText().toString();
-                String result;
-                result = ExpressionUtils.calculateExpression(line).toPlainString();
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                ContentValues cv = new ContentValues();
+                String date = new Date().toString();
+                String expression = display.getText().toString();
+                String result = ExpressionUtils.calculateExpression(expression).toPlainString();
+                cv.put("date", date);
+                cv.put("expression", expression);
+                cv.put("result", result);
+                long id = db.insert("calcHistory", null, cv);
+                Log.i("info", "the data has added. Id - " + id);
+                dbHelper.close();
                 symbolDisplay.setText(result);
-                HistoryKeeper.addItem(new HistoryItem(new Date(), line, result));
-                display.setText("");
                 break;
             case R.id.editText2:
-                Intent intent = new Intent(this, HistoryActivity.class);
-                startActivity(intent);
+                Intent i = new Intent(this, HistoryActivity.class);
+                startActivityForResult(i, 404);
                 break;
             case R.id.btnClear:
                 display.setText("");
                 symbolDisplay.setText("");
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
+        String expression = data.getStringExtra("expression");
+        symbolDisplay.setText(String.valueOf(ExpressionUtils.calculateExpression(expression).toPlainString()));
+        display.setText(String.valueOf(expression));
     }
 }

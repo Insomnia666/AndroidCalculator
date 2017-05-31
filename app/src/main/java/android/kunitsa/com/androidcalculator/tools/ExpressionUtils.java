@@ -203,18 +203,4 @@ public class ExpressionUtils {
      */
     public ExpressionUtils() {
     }
-
-    /**
-     * Тестирует методы.
-     *
-     * @param args список аргументов командной строки.
-     */
-    /*public static void main(String[] args) {
-        String expression = "3 + 4 * 2 / (1 - 5) + 2";
-        System.out.println("Инфиксная нотация:         " + expression);
-        System.out.println("\tРезультат 3");
-        String rpn = sortingStation(expression, MAIN_MATH_OPERATIONS);
-        System.out.println("Обратная польская нотация: " + rpn);
-        System.out.println("\tРезультат " + calculateExpression(expression));
-    }*/
 }

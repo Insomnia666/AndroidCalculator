@@ -20,9 +20,9 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button allClear, equals, divide, multiply, minus, plus, square, percent, exponent, left, right, polska;
+    Button allClear, equals, divide, multiply, minus, plus, square, percent, exponent, left, right, backspace;
     Button one, two, three, four, five, six, seven, eight, nine, zero, point;
-    EditText display;
+    TextView display;
     TextView symbolDisplay;
 
     SQLiteOpenHelper dbHelper;
@@ -43,14 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             registerSimpleComponents();
             registerPolskaComponents();
         } else {
-            setContentView(R.layout.activity_main_landscape);
+            /*setContentView(R.layout.activity_main_landscape);
             registerSimpleComponents();
-            registerEngeneeringComponents();
+            registerEngeneeringComponents();*/
         }
     }
 
     public void registerSimpleComponents() {
-        display = (EditText) findViewById(R.id.editText1);
+        display = (TextView) findViewById(R.id.editText1);
         symbolDisplay = (TextView) findViewById(R.id.editText2);
         symbolDisplay.setOnClickListener(this);
         allClear = (Button) findViewById(R.id.btnClear);
@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         plus.setOnClickListener(this);
         minus = (Button) findViewById(R.id.btnMinus);
         minus.setOnClickListener(this);
+        backspace = (Button) findViewById(R.id.btnBackSpace);
+        backspace.setOnClickListener(this);
     }
 
     void registerEngeneeringComponents() {
@@ -166,6 +168,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnExponent:
 
+                break;
+            case R.id.btnBackSpace:
+                if (display.getText().toString().length() > 0) {
+                    display.setText(display.getText().toString().substring(0, display.getText().toString().length() - 1));
+                }
                 break;
             case R.id.btnResult:
                 SQLiteDatabase db = dbHelper.getWritableDatabase();

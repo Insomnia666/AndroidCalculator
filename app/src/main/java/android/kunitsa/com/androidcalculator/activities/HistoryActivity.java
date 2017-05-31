@@ -79,21 +79,11 @@ public class HistoryActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String expression = ((TextView) view.findViewById(R.id.expression_text_view)).getText().toString();
-                                dbHelper = new DBHelper(historyView.getContext());
-                                SQLiteDatabase db = dbHelper.getWritableDatabase();
                                 HistoryItem hi = history.get(position);
-
-                                db = dbHelper.getWritableDatabase();
-                                db.delete("history", "id = " + id, null);
-                                Log.d("HistoryDAO", "item id=" + id + " deleted");
-
-                                Log.i("debug", "id element for deleting =" + hi.getId());
-                                Log.i("debug", "position =" + position);
-
+                                dbHelper = new DBHelper(view.getContext());
+                                SQLiteDatabase db = dbHelper.getWritableDatabase();
                                 int id = db.delete("calcHistory", "id" + "=" + hi.getId(), null);
-                                Log.i("debug", "deleting .. id =" + id);
-
-                                db.close();
+                                history.remove(position);
                                 adapter.notifyItemRemoved(position);
                             }
                         });

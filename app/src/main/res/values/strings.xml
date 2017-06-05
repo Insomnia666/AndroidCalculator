@@ -4,4 +4,8 @@
     <string name="cancel">Cancel</string>
     <string name="OK">Ok</string>
     <string name="backspace"><![CDATA[<-]]></string>
+    <string name="bin">Bin</string>
+    <string name="oct">Oct</string>
+    <string name="dec">Dec</string>
+    <string name="hex">Hex</string>
 </resources>

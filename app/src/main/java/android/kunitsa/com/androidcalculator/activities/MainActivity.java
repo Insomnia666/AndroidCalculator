@@ -6,24 +6,33 @@ import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.kunitsa.com.androidcalculator.DBHelper;
+import android.kunitsa.com.androidcalculator.OnFragmentInteractionListener;
+import android.kunitsa.com.androidcalculator.fragments.FragmentBin;
+import android.kunitsa.com.androidcalculator.fragments.FragmentDec;
 import android.kunitsa.com.androidcalculator.R;
+import android.kunitsa.com.androidcalculator.fragments.FragmentOct;
 import android.kunitsa.com.androidcalculator.tools.ExpressionUtils;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener, OnFragmentInteractionListener {
 
     Button allClear, equals, divide, multiply, minus, plus, square, percent, exponent, left, right, backspace;
     Button one, two, three, four, five, six, seven, eight, nine, zero, point;
     TextView display;
     TextView symbolDisplay;
+    FragmentDec fragDec;
+    FragmentBin fragBin;
+    FragmentOct fragOct;
+    RadioButton rOne, rTwo, rThree, rFour;
+    android.app.FragmentTransaction fTrans;
 
     SQLiteOpenHelper dbHelper;
 
@@ -43,9 +52,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             registerSimpleComponents();
             registerPolskaComponents();
         } else {
-            /*setContentView(R.layout.activity_main_landscape);
-            registerSimpleComponents();
-            registerEngeneeringComponents();*/
+            setContentView(R.layout.activity_main_landscape);
+            registerEngeneeringComponents();
+            rThree.setChecked(true);
+            decInit();
+            //rThree.setChecked(true);
+            /*registerSimpleComponents();
+            registerPolskaComponents();*/
         }
     }
 
@@ -92,12 +105,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void registerEngeneeringComponents() {
-        square = (Button) findViewById(R.id.btnSquare);
+        /*square = (Button) findViewById(R.id.btnSquare);
         square.setOnClickListener(this);
         percent = (Button) findViewById(R.id.btnPercent);
         percent.setOnClickListener(this);
         exponent = (Button) findViewById(R.id.btnExponent);
-        exponent.setOnClickListener(this);
+        exponent.setOnClickListener(this);*/
+        rOne = (RadioButton) findViewById(R.id.rOne);
+        rTwo = (RadioButton) findViewById(R.id.rTwo);
+        rThree = (RadioButton) findViewById(R.id.rThree);
+        rFour = (RadioButton) findViewById(R.id.rFour);
+        rOne.setOnClickListener(this);
+        rTwo.setOnClickListener(this);
+        rThree.setOnClickListener(this);
+        rFour.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onFragmentInteraction(String link) {
+        //FragmentBin fragment = (FragmentBin) getFragmentManager().findFragmentById(R.id.frgmCont);
     }
 
     void registerPolskaComponents() {
@@ -169,6 +196,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnExponent:
 
                 break;
+            case R.id.rOne:
+                binInit();
+                break;
+            case R.id.rTwo:
+                octInit();
+                break;
+            case R.id.rThree:
+                decInit();
+                break;
+            case R.id.rFour:
+
+                break;
+            default:
+                break;
             case R.id.btnBackSpace:
                 if (display.getText().toString().length() > 0) {
                     display.setText(display.getText().toString().substring(0, display.getText().toString().length() - 1));
@@ -207,5 +248,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String expression = data.getStringExtra("expression");
         symbolDisplay.setText(String.valueOf(ExpressionUtils.calculateExpression(expression).toPlainString()));
         display.setText(String.valueOf(expression));
+    }
+
+/*    View.OnClickListener radioButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            RadioButton rb = (RadioButton) v;
+            switch (rb.getId()) {
+                case R.id.rOne:
+                    binInit();
+                    break;
+                case R.id.rTwo:
+
+                    break;
+                case R.id.rThree:
+                    decInit();
+                    break;
+                case R.id.rFour:
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    };*/
+
+    public void decInit(){
+        fragDec = new FragmentDec();
+        fTrans = getFragmentManager().beginTransaction();
+        fTrans.replace(R.id.frgmCont, fragDec);
+        fTrans.commit();
+    }
+
+    public void binInit(){
+        fragBin = new FragmentBin();
+        fTrans = getFragmentManager().beginTransaction();
+        fTrans.replace(R.id.frgmCont, fragBin);
+        fTrans.commit();
+    }
+
+    public void octInit(){
+        fragOct = new FragmentOct();
+        fTrans = getFragmentManager().beginTransaction();
+        fTrans.replace(R.id.frgmCont, fragOct);
+        fTrans.commit();
     }
 }

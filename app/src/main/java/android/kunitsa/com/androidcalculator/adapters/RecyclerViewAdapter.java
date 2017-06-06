@@ -1,7 +1,7 @@
 package android.kunitsa.com.androidcalculator.adapters;
 
 import android.kunitsa.com.androidcalculator.R;
-import android.kunitsa.com.androidcalculator.tools.HistoryItem;
+import android.kunitsa.com.androidcalculator.entity.HistoryItem;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

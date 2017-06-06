@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.kunitsa.com.androidcalculator.Converter;
 import android.kunitsa.com.androidcalculator.DBHelper;
+import android.kunitsa.com.androidcalculator.Notation;
 import android.kunitsa.com.androidcalculator.OnFragmentInteractionListener;
 import android.kunitsa.com.androidcalculator.fragments.FragmentBin;
 import android.kunitsa.com.androidcalculator.fragments.FragmentDec;
 import android.kunitsa.com.androidcalculator.R;
+import android.kunitsa.com.androidcalculator.fragments.FragmentHex;
 import android.kunitsa.com.androidcalculator.fragments.FragmentOct;
 import android.kunitsa.com.androidcalculator.tools.ExpressionUtils;
 import android.support.v4.app.FragmentActivity;
@@ -31,8 +34,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     FragmentDec fragDec;
     FragmentBin fragBin;
     FragmentOct fragOct;
+    FragmentHex fragHex;
     RadioButton rOne, rTwo, rThree, rFour;
     android.app.FragmentTransaction fTrans;
+
+    private Notation notation;
 
     SQLiteOpenHelper dbHelper;
 
@@ -40,7 +46,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_polska);
         registerSimpleComponents();
-        registerPolskaComponents();
         dbHelper = new DBHelper(this);
     }
 
@@ -50,15 +55,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             setContentView(R.layout.activity_main_polska);
             registerSimpleComponents();
-            registerPolskaComponents();
         } else {
             setContentView(R.layout.activity_main_landscape);
             registerEngeneeringComponents();
             rThree.setChecked(true);
             decInit();
-            //rThree.setChecked(true);
-            /*registerSimpleComponents();
-            registerPolskaComponents();*/
         }
     }
 
@@ -102,15 +103,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         minus.setOnClickListener(this);
         backspace = (Button) findViewById(R.id.btnBackSpace);
         backspace.setOnClickListener(this);
+        left = (Button) findViewById(R.id.btnLeft);
+        left.setOnClickListener(this);
+        right = (Button) findViewById(R.id.btnRight);
+        right.setOnClickListener(this);
+    }
+
+    private void updateInputText(Notation newNotation){
+        String oldText = display.getText().toString();
+        String newText = Converter.convertByNotation(notation, newNotation, oldText);
+        display.setText(newText);
+        //inputText.setSelection(inputText.getText().length());
     }
 
     void registerEngeneeringComponents() {
-        /*square = (Button) findViewById(R.id.btnSquare);
-        square.setOnClickListener(this);
-        percent = (Button) findViewById(R.id.btnPercent);
-        percent.setOnClickListener(this);
-        exponent = (Button) findViewById(R.id.btnExponent);
-        exponent.setOnClickListener(this);*/
         rOne = (RadioButton) findViewById(R.id.rOne);
         rTwo = (RadioButton) findViewById(R.id.rTwo);
         rThree = (RadioButton) findViewById(R.id.rThree);
@@ -127,12 +133,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //FragmentBin fragment = (FragmentBin) getFragmentManager().findFragmentById(R.id.frgmCont);
     }
 
-    void registerPolskaComponents() {
-        left = (Button) findViewById(R.id.btnLeft);
-        left.setOnClickListener(this);
-        right = (Button) findViewById(R.id.btnRight);
-        right.setOnClickListener(this);
-    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -206,7 +206,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 decInit();
                 break;
             case R.id.rFour:
-
+                hexInit();
                 break;
             default:
                 break;
@@ -250,29 +250,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         display.setText(String.valueOf(expression));
     }
 
-/*    View.OnClickListener radioButtonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            RadioButton rb = (RadioButton) v;
-            switch (rb.getId()) {
-                case R.id.rOne:
-                    binInit();
-                    break;
-                case R.id.rTwo:
-
-                    break;
-                case R.id.rThree:
-                    decInit();
-                    break;
-                case R.id.rFour:
-
-                    break;
-                default:
-                    break;
-            }
-        }
-    };*/
-
     public void decInit(){
         fragDec = new FragmentDec();
         fTrans = getFragmentManager().beginTransaction();
@@ -291,6 +268,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         fragOct = new FragmentOct();
         fTrans = getFragmentManager().beginTransaction();
         fTrans.replace(R.id.frgmCont, fragOct);
+        fTrans.commit();
+    }
+
+    public void hexInit(){
+        fragHex = new FragmentHex();
+        fTrans = getFragmentManager().beginTransaction();
+        fTrans.replace(R.id.frgmCont, fragHex);
         fTrans.commit();
     }
 }

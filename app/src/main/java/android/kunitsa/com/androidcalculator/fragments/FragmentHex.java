@@ -14,13 +14,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * Created by Администратор on 05.06.2017.
+ * Created by Администратор on 06.06.2017.
  */
 
-public class FragmentOct extends Fragment implements View.OnClickListener {
+public class FragmentHex extends Fragment implements View.OnClickListener {
 
     Button allClear, equals, divide, multiply, minus, plus, backspace;
-    Button one, two, three, four, five, six, seven, zero;
+    Button one, two, three, four, five, six, seven, eight, nine, zero, a, b, c, d, e, f, point;
     View v;
     TextView display;
     TextView symbolDisplay;
@@ -30,7 +30,7 @@ public class FragmentOct extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_oct, null);
+        v = inflater.inflate(R.layout.fragment_hex, null);
         registerSimpleComponents();
 
         return v;
@@ -58,8 +58,26 @@ public class FragmentOct extends Fragment implements View.OnClickListener {
         six.setOnClickListener(this);
         seven = (Button) v.findViewById(R.id.btn7);
         seven.setOnClickListener(this);
+        eight = (Button) v.findViewById(R.id.btn8);
+        eight.setOnClickListener(this);
+        nine = (Button) v.findViewById(R.id.btn9);
+        nine.setOnClickListener(this);
         zero = (Button) v.findViewById(R.id.btn0);
         zero.setOnClickListener(this);
+        a = (Button) v.findViewById(R.id.btnA);
+        a.setOnClickListener(this);
+        b = (Button) v.findViewById(R.id.btnB);
+        b.setOnClickListener(this);
+        c = (Button) v.findViewById(R.id.btnC);
+        c.setOnClickListener(this);
+        d = (Button) v.findViewById(R.id.btnD);
+        d.setOnClickListener(this);
+        e = (Button) v.findViewById(R.id.btnE);
+        e.setOnClickListener(this);
+        f = (Button) v.findViewById(R.id.btnF);
+        f.setOnClickListener(this);
+        point = (Button) v.findViewById(R.id.btnPoint);
+        point.setOnClickListener(this);
         divide = (Button) v.findViewById(R.id.btnDevide);
         divide.setOnClickListener(this);
         multiply = (Button) v.findViewById(R.id.btnMultiply);
@@ -75,6 +93,12 @@ public class FragmentOct extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btnLeft:
+                display.append("(");
+                break;
+            case R.id.btnRight:
+                display.append(")");
+                break;
             case R.id.btn1:
                 display.append("1");
                 break;
@@ -96,8 +120,17 @@ public class FragmentOct extends Fragment implements View.OnClickListener {
             case R.id.btn7:
                 display.append("7");
                 break;
+            case R.id.btn8:
+                display.append("8");
+                break;
+            case R.id.btn9:
+                display.append("9");
+                break;
             case R.id.btn0:
                 display.append("0");
+                break;
+            case R.id.btnPoint:
+                display.append(".");
                 break;
             case R.id.btnPlus:
                 display.append("+");
@@ -111,8 +144,26 @@ public class FragmentOct extends Fragment implements View.OnClickListener {
             case R.id.btnMultiply:
                 display.append("*");
                 break;
+            case R.id.btnA:
+                display.append("A");
+                break;
+            case R.id.btnB:
+                display.append("B");
+                break;
+            case R.id.btnC:
+                display.append("C");
+                break;
+            case R.id.btnD:
+                display.append("D");
+                break;
+            case R.id.btnE:
+                display.append("E");
+                break;
+            case R.id.btnF:
+                display.append("F");
+                break;
             case R.id.btnResult:
-                display.setText(Converter.convertByNotation(Notation.OCT, Notation.DEC, display.getText().toString()));
+                display.setText(Converter.convertByNotation(Notation.HEX, Notation.DEC, display.getText().toString()));
                 break;
             case R.id.btnBackSpace:
                 if (display.getText().toString().length() > 0) {

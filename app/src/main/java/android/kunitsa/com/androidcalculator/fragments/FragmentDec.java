@@ -134,6 +134,11 @@ public class FragmentDec extends Fragment implements View.OnClickListener {
             case R.id.btnSquare:
 
                 break;
+            case R.id.btnBackSpace:
+                if (display.getText().toString().length() > 0) {
+                    display.setText(display.getText().toString().substring(0, display.getText().toString().length() - 1));
+                }
+                break;
         }
     }
 

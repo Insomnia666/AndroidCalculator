@@ -2,6 +2,8 @@ package android.kunitsa.com.androidcalculator.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.kunitsa.com.androidcalculator.Converter;
+import android.kunitsa.com.androidcalculator.Notation;
 import android.kunitsa.com.androidcalculator.OnFragmentInteractionListener;
 import android.kunitsa.com.androidcalculator.R;
 import android.os.Bundle;
@@ -78,6 +80,14 @@ public class FragmentBin extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnMultiply:
                 display.append("*");
+                break;
+            case R.id.btnResult:
+                display.setText(Converter.convertByNotation(Notation.BIN, Notation.DEC, display.getText().toString()));
+                break;
+            case R.id.btnBackSpace:
+                if (display.getText().toString().length() > 0) {
+                    display.setText(display.getText().toString().substring(0, display.getText().toString().length() - 1));
+                }
                 break;
         }
     }

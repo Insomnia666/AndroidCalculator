@@ -1,5 +1,7 @@
 package android.kunitsa.com.androidcalculator.tools;
 
+import android.kunitsa.com.androidcalculator.entity.HistoryItem;
+
 import java.util.ArrayList;
 import java.util.List;
 

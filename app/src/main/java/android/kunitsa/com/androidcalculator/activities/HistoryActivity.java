@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.kunitsa.com.androidcalculator.DBHelper;
-import android.kunitsa.com.androidcalculator.tools.HistoryItem;
+import android.kunitsa.com.androidcalculator.entity.HistoryItem;
 import android.kunitsa.com.androidcalculator.tools.RecyclerItemClickListener;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -15,14 +15,10 @@ import android.support.v7.widget.RecyclerView;
 
 import android.kunitsa.com.androidcalculator.R;
 import android.kunitsa.com.androidcalculator.adapters.RecyclerViewAdapter;
-import android.kunitsa.com.androidcalculator.tools.HistoryKeeper;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
-import static android.R.attr.id;
 
 public class HistoryActivity extends AppCompatActivity {
     public DBHelper dbHelper;
